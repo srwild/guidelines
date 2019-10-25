@@ -16,16 +16,26 @@ Variable([
     dict(name="slantDegrees", ui="EditText", args=dict(text="10")),
 ], globals())
 
+def variableCheck(variable):
+    '''
+    Change variable in UI to float, if empty return 0.
+    Prevents error if values are deleted from the field.
+    '''
+    if variable:
+        return float(variable)
+    else:
+        return 0
+
 # main settings
-nibSizeMM = float(nib_mm)
-ascender = float(ascender)
-xHeight = float(xHeight)
-descender = float(descender)
-slantState = slantGuides
-slant = float(slantDegrees)
+nibSizeMM = variableCheck(nib_mm)
+ascender = variableCheck(ascender)
+xHeight = variableCheck(xHeight)
+descender = variableCheck(descender)
+slantState = variableCheck(slantGuides)
+slant = variableCheck(slantDegrees)
 
 # Convert page margin from inches to points
-margin = float(pageMargin_inches) * 72
+margin = variableCheck(pageMargin_inches) * 72
 
 guideStroke = .5
 guideStrokeColor = 0
