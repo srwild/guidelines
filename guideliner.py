@@ -149,11 +149,24 @@ with savedState():
         guide(ascender)
         translate(0, guideHeightPadded)
 
-fontSize(5)
-text("Nib: " + str(nibSizeMM) + "mm • Scale: " + str(int(ascender)) +
-     "/" + str(int(xHeight)) + "/" + str(int(descender)), (margin, margin))
 
+# Make a slug
+def slugNumber(number):
+    '''
+    Change number to integer if it's a whole number
+    '''
+    if number % 1 > 0:
+        return str(number)
+    else:
+        return str(int(number))
+slugText = ["Nib: ", slugNumber(nibSizeMM), "mm • Scale: ",
+            "/".join([slugNumber(ascender), slugNumber(xHeight), slugNumber(descender)])]
+fontSize(5)
+text("".join(slugText), (margin, margin))
+
+# Mask parts of slant guides that overshoot into the margin
 fill(1)
 rect(width() - margin, 0, margin, height())
 
+# *******************
 saveImage("guide-sheets/guidelines.pdf")
