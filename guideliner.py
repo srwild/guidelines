@@ -123,14 +123,14 @@ def italic_guide():
         c = a / math.sin(A)
         b = c * math.cos(A)
 
-        x = nibWidth * 2.5
-        x2 = x + b
-        y2 = a
+        lineSpacing = (width() - (margin * 2) - (nibWidth * 2)) / slantRepeat
 
+        translate(nibWidth * 2, 0)
         for i in range(slantRepeat):
-            line((x, 0), (x2, y2))
-            x += slantSpace
-            x2 += slantSpace
+            line((0, 0), (b, a))
+            translate(lineSpacing, 0)
+
+
 
 
 with savedState():
@@ -167,6 +167,7 @@ text("".join(slugText), (margin, margin))
 # Mask parts of slant guides that overshoot into the margin
 fill(1)
 rect(width() - margin, 0, margin, height())
+
 
 # *******************
 saveImage("guide-sheets/guidelines.pdf")
