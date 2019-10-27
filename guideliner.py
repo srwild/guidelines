@@ -32,7 +32,6 @@ nibSizeMM = variableCheck(nib_mm)
 ascender = variableCheck(ascender)
 xHeight = variableCheck(xHeight)
 descender = variableCheck(descender)
-slantState = variableCheck(slantGuides)
 slant = variableCheck(slantDegrees)
 
 # Convert page margin from inches to points
@@ -116,7 +115,7 @@ def italic_guide():
 
         # Slant guide options
         slantRepeat = 15
-        slantSpace = (width() - (margin * 2)) / slantRepeat
+        lineSpacing = (width() - (margin * 2) - (nibWidth * 2)) / slantRepeat
 
         # Variables for calculating slant with right triangle trig formula (This was hard for a high school drop out)
         B = math.radians(slant)
@@ -125,7 +124,6 @@ def italic_guide():
         c = a / math.sin(A)
         b = c * math.cos(A)
 
-        lineSpacing = (width() - (margin * 2) - (nibWidth * 2)) / slantRepeat
 
         translate(nibWidth * 2, 0)
         for i in range(slantRepeat):
@@ -133,12 +131,10 @@ def italic_guide():
             translate(lineSpacing, 0)
 
 
-
-
 with savedState():
     translate(margin, guideMargin)
     for x in range(repeat):
-        if slantState == 1:
+        if slantGuides == 1:
             italic_guide()
         previous = 0
         start = previous
@@ -165,6 +161,7 @@ slugText = ["Nib: ", slugNumber(nibSizeMM), "mm • Scale: ",
             "/".join([slugNumber(ascender), slugNumber(xHeight), slugNumber(descender)])]
 fontSize(5)
 text("".join(slugText), (margin, margin))
+
 
 # Mask parts of slant guides that overshoot into the margin
 fill(1)
