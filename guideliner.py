@@ -14,6 +14,7 @@ Variable([
     dict(name="spacing", ui="Slider", args=dict(value=.75, minValue=0, maxValue=5)),
     dict(name="slantGuides", ui="CheckBox", args=dict(value=True)),
     dict(name="slantDegrees", ui="EditText", args=dict(text="10")),
+    dict(name="drawSquares", ui="CheckBox", args=dict(value=True)),
 ], globals())
 
 def variableCheck(variable):
@@ -88,23 +89,24 @@ def guide(scale):
     else:
         z = 0
     # Draw top and bottom guide
-    line((nibWidth, y), (left, y))
-    line((nibWidth, y + nibWidth * scale), (left, y + nibWidth * scale))
+    line((0, y), (left, y))
+    line((0, y + nibWidth * scale), (left, y + nibWidth * scale))
 
-    for i in range(divisions):
-        if (i + z) % 2 == 0:
-            rect(0, y, *square)
-        else:
-            rect(nibWidth, y, *square)
-        y += nibWidth
+    if drawSquares == True:
+        for i in range(divisions):
+            if (i + z) % 2 == 0:
+                rect(0, y, *square)
+            else:
+                rect(nibWidth, y, *square)
+            y += nibWidth
 
-    if remainder:
-        y2 = nibWidth * remainder
-        if (i + z) % 2 == 0:
-            rect(nibWidth, y, nibWidth, y2)
-        else:
-            rect(0, y, nibWidth, y2)
-        y += y2
+        if remainder:
+            y2 = nibWidth * remainder
+            if (i + z) % 2 == 0:
+                rect(nibWidth, y, nibWidth, y2)
+            else:
+                rect(0, y, nibWidth, y2)
+            y += y2
 
 
 def italic_guide():
