@@ -1,4 +1,9 @@
 import math
+from AppKit import NSColor
+
+# Default guide colors
+_initial_guide_color = NSColor.colorWithCalibratedRed_green_blue_alpha_(0, 0, 0, 1)
+_initial_slant_color = NSColor.colorWithCalibratedRed_green_blue_alpha_(.6, .6, .6, 1)
 
 pageSizes = ("Letter", "Legal", "Tabloid", "A3", "A4")
 
@@ -15,6 +20,8 @@ Variable([
     dict(name="slantGuides", ui="CheckBox", args=dict(value=True)),
     dict(name="slantDegrees", ui="EditText", args=dict(text="10")),
     dict(name="drawSquares", ui="CheckBox", args=dict(value=True)),
+    dict(name="guide_color", ui="ColorWell", args=dict(color=_initial_guide_color)),
+    dict(name="slant_color", ui="ColorWell", args=dict(color=_initial_slant_color))
 ], globals())
 
 def variableCheck(variable):
@@ -37,8 +44,11 @@ slant = variableCheck(slantDegrees)
 # Convert page margin from inches to points
 margin = variableCheck(pageMargin_inches) * 72
 
+# Stroke Settings
 guideStroke = .5
-guideStrokeColor = 0
+guideStrokeColor = guide_color
+slantStroke = guideStroke
+slantStrokeColor = slant_color
 
 # Converts nib width in mm to points and subtracts guide line thinkness so square is accurate
 nibWidth = (nibSizeMM * 2.835) - (guideStroke * 2)
@@ -110,8 +120,8 @@ def guide(scale):
 
 def italic_guide():
     with savedState():
-        stroke(.8)
-        strokeWidth(guideStroke)
+        stroke(slantStrokeColor)
+        strokeWidth(slantStroke)
 
         # Slant guide options
         slantRepeat = 15
