@@ -50,8 +50,8 @@ guideStrokeColor = guide_color
 slantStroke = guideStroke
 slantStrokeColor = slant_color
 
-# Converts nib width in mm to points and subtracts guide line thinkness so square is accurate
-nibWidth = (nibSizeMM * 2.835) - (guideStroke * 2)
+# Converts nib width to points
+nibWidth = (nibSizeMM * 2.8346456693)
 
 # Set page dimensions
 def pageDimensions():
@@ -80,42 +80,48 @@ def guide(scale):
     left = width() - (margin * 2)
     square = nibWidth, nibWidth
 
-    # colors
-    fill(guideStrokeColor)
-    stroke(guideStrokeColor)
-    strokeWidth(guideStroke)
+    # Draw lines
+    with savedState():
+        # colors
+        fill(guideStrokeColor)
+        stroke(guideStrokeColor)
+        strokeWidth(guideStroke)
 
-    # Where to start based on previous guide set
-    y = start
+        # Where to start based on previous guide set
+        y = start
 
-    # Forces the squares to alternate when previous guide set is odd or fractional
-    n = previous
-    # Rounds up floats
-    if n % 1 > 0:
-        n = int(n) + 1
-    if n % 2 == 0:
-        z = 1
-    else:
-        z = 0
-    # Draw top and bottom guide
-    line((0, y), (left, y))
-    line((0, y + nibWidth * scale), (left, y + nibWidth * scale))
+        # Forces the squares to alternate when previous guide set is odd or fractional
+        n = previous
+        # Rounds up floats
+        if n % 1 > 0:
+            n = int(n) + 1
+        if n % 2 == 0:
+            z = 1
+        else:
+            z = 0
+        # Draw top and bottom guide
+        line((0, y), (left, y))
+        line((0, y + nibWidth * scale), (left, y + nibWidth * scale))
 
+    # Draw squares
     if drawSquares == True:
-        for i in range(divisions):
-            if (i + z) % 2 == 0:
-                rect(0, y, *square)
-            else:
-                rect(nibWidth, y, *square)
-            y += nibWidth
+        with savedState():
+            fill(guideStrokeColor)
 
-        if remainder:
-            y2 = nibWidth * remainder
-            if (i + z) % 2 == 0:
-                rect(nibWidth, y, nibWidth, y2)
-            else:
-                rect(0, y, nibWidth, y2)
-            y += y2
+            for i in range(divisions):
+                if (i + z) % 2 == 0:
+                    rect(0, y, *square)
+                else:
+                    rect(nibWidth, y, *square)
+                y += nibWidth
+
+            if remainder:
+                y2 = nibWidth * remainder
+                if (i + z) % 2 == 0:
+                    rect(nibWidth, y, nibWidth, y2)
+                else:
+                    rect(0, y, nibWidth, y2)
+                y += y2
 
 
 def italic_guide():
